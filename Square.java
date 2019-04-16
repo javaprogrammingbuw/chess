@@ -1,7 +1,7 @@
 import javax.swing.*;
 
 public class Square extends JButton{
-	private String piece;
+	public String piece;
 
 	public Square(){
 		super();
