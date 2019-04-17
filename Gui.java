@@ -11,12 +11,34 @@ public class Gui extends JFrame{
 
 	private JPanel contentPane;
 	private JPanel chessBoard;
+	private JPanel buttonPane;
 	private Square[][] squares = new Square[8][8];
 	private JTextField tf1;
 	private JTextField tf2;
 	private JButton calcBtn;
 	private HashMap<String,ImageIcon> pieces = new LinkedHashMap<>();
 	private Square first = null;
+	public int xis;
+	public int yxis;
+	public int k,l;
+	public int white = 0 ;
+	public int black = 0;
+
+	public int getXis(){
+		return this.xis;
+	}
+
+    public int getYxis(){
+    	return this.yxis;
+    } 
+
+    public void setXis(int x){
+    	this.xis = x;
+    }
+
+    public void setYxis(int y){
+    	this.yxis = y;
+    }
 
 	public Gui(){
 		initUi();
@@ -27,9 +49,23 @@ public class Gui extends JFrame{
 		contentPane = (JPanel) getContentPane();
 
 		chessBoard = new JPanel(new GridLayout(8, 8));
-		chessBoard.setPreferredSize(new Dimension(1200, 1200));
+		chessBoard.setPreferredSize(new Dimension(1000, 1000));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
+
         contentPane.add(chessBoard);
+
+        buttonPane = new JPanel();
+        calcBtn = new JButton("Check-Button");
+        buttonPane.add(calcBtn);
+        tf1 = new JTextField();
+        // tf1.setFont(font);
+        tf1.setText("the black checks till now:");
+        buttonPane.add(tf1);
+        tf2 = new JTextField();
+        // tf2.setFont(font);
+        tf2.setText("the white checks till now:");
+        buttonPane.add(tf2);
+        contentPane.add(buttonPane);
 
         // create the chess board squares according to:
         // https://stackoverflow.com/questions/21077322/create-a-chess-board-with-jpanel
@@ -53,16 +89,38 @@ public class Gui extends JFrame{
                 chessBoard.add(squares[j][i]);
             }
         }
+        calcBtn = new JButton("Check-Button");
+        calcBtn.setToolTipText("know the about checks, give a klick");
+        calcBtn.addActionListener((event)-> submit());
 
 		contentPane.setLayout(new FlowLayout());
 
         pack();
+        // createGroupLayout();
 
         //Position in screen center
         setLocationRelativeTo(null);
         //Close Application when window is closed
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
+	// private void createGroupLayout(){
+	// 	JPanel pane1 = new JPanel();
+ //    	GroupLayout gl1 = new GroupLayout(pane1);
+ //    	pane1.setLayout(gl1);
+
+ //    	pane1.setToolTipText("display  pane");
+
+ //    	gl1.setAutoCreateContainerGaps(true);
+ //    	gl1.setAutoCreateGaps(true);
+
+ //    	gl1.setHorizontalGroup(gl1.createSequentialGroup().addComponent(tf1).addComponent(calcBtn).addComponent(tf2));
+ //        	gl1.setVerticalGroup(gl1.createSequentialGroup().addGroup(gl1.createParallelGroup(GroupLayout.Alignment.BASELINE)
+ //                                                    .addComponent(tf1)
+ //                                                    .addComponent(calcBtn)
+ //                                                    .addComponent(tf2)));
+
+ //        		pack();
+	// }
 
 	public void initPieces(){
 		//create pieces and add them to LinkedHashMap
@@ -171,21 +229,307 @@ public class Gui extends JFrame{
 		}
 
 	}
+	private boolean isIconThere(int i, int j){
+		if(squares[i][j].piece==null){
+			return false;
+		}else{
+			return true;
+		}
+	}
+
+	private boolean isIconInWay(int i, int j){
+		k = getXis();
+		l = getYxis();
+		if(i<=k-1&&j<=l-1&&i-k==j-l){
+            for(int s=k-1, n=l-1; s>i&&n>j;s--,n--){
+            	if(isIconThere(s,n)==true){
+            		return true;
+            	}
+
+            }
+		}else if(i>=k+1&&j<=l-1&&k-i==j-l){
+			for(int s=k+1, n=l-1; s<i&&n>j;s++,n--){
+            	if(isIconThere(s,n)==true){
+            		return true;
+            	}
+            }
+		}else if(i<=k-1&&j>=l+1&&i-k==l-j){
+			for(int s=k-1, n=l+1; s>i&&n<j;s--,n++){
+            	if(isIconThere(s,n)==true){
+            		return true;
+            	}
+            }
+		}else if(i>=k+1&&j>=l+1&&k-i==l-j){
+			for(int s=k+1, n=l+1; s<i&&n<j;s++,n++){
+            	if(isIconThere(s,n)==true){
+            		return true;
+            	}
+            }
+		}else if(i>=0&&i<=7&&j==l){
+			for(int s=k+1; s<i;s++){
+            	if(isIconThere(s,j)==true){
+            		return true;
+            	}
+            }
+            for(int n=k-1; n>i; n--){
+            	if(isIconThere(n,j)==true){
+            		return true;
+            	}
+            }
+		}else if(i==k&&j>=0&&j<=7){
+			for(int s=l+1; s<j;s++){
+            	if(isIconThere(i,s)==true){
+            		return true;
+            	}
+            }
+            for(int n=l-1; n>j; n--){
+            	if(isIconThere(i,n)==true){
+            		return true;
+            	}
+            }
+		}
+			return false;
+	}
+	private boolean isWhite(int i, int j){
+		if(squares[i][j].getIcon()==pieces.get("rook1-white")||squares[i][j].getIcon()==pieces.get("rook2-white")||squares[i][j].getIcon()==pieces.get("knight1-white")||
+			squares[i][j].getIcon()==pieces.get("knight2-white")||squares[i][j].getIcon()==pieces.get("bishop1-white")||squares[i][j].getIcon()==pieces.get("bishop2-white")||
+			squares[i][j].getIcon()==pieces.get("queen-white")||squares[i][j].getIcon()==pieces.get("king-white")||squares[i][j].getIcon()==pieces.get("pawn1-white")||
+			squares[i][j].getIcon()==pieces.get("pawn2-white")||squares[i][j].getIcon()==pieces.get("pawn3-white")||squares[i][j].getIcon()==pieces.get("pawn4-white")||
+			squares[i][j].getIcon()==pieces.get("pawn5-white")||squares[i][j].getIcon()==pieces.get("pawn6-white")||squares[i][j].getIcon()==pieces.get("pawn7-white")||
+			squares[i][j].getIcon()==pieces.get("pawn8-white")){
+			return true;
+
+		}else{
+			return false;
+		}
+	}
+	private int checksFigure(){
+		k = getXis();
+		l = getYxis();
+		
+		if(isWhite(k,l)==true){
+           return white++;
+		}else if(isWhite(k,l)==false){
+			return black++;
+		}else{
+			return 0;
+		}
+	}
+	private void submit(){
+		k = getXis();
+		l = getYxis();
+		
+		if(isWhite(k,l)==false){
+			tf1.setText("the black checks till now: "+checksFigure());
+			System.out.println(white+checksFigure());
+		}else{
+			tf2.setText("the white checks till now: "+checksFigure());
+		}
+	}
 
 	private void movePiece(int i, int j){
 		if(first==null){
 			first=squares[i][j];
+			setXis(i);
+			setYxis(j);
+			
+			
 		}
 		else{
-			Square second = squares[i][j];
-			second.setPiece(first.getPiece());
-			second.setIcon(pieces.get(second.getPiece()));
-			first.setPiece(null);
-			first.setIcon(new ImageIcon(
-                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-			first=null;
+			// if(i>=getXis()-2&&i<=getXis()+2&&j>=getYxis()-2&&j<=getYxis()+2){
+			// 	Square second = squares[i][j];
+			// 	second.setPiece(first.getPiece());
+			// 	second.setIcon(pieces.get(second.getPiece()));
+			// 	first.setPiece(null);
+			// 	first.setIcon(new ImageIcon(
+	  //                   	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+			// 	first = null;
+			// }
+			k=getXis();
+			l=getYxis();
+			if(i==k&&j==l){
+				// Square second = squares[i][j];
+				// second.setPiece(first.getPiece());
+				// second.setIcon(pieces.get(second.getPiece()));
+				// first.setPiece(null);
+				// first.setIcon(new ImageIcon(
+	   //                  	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+				first = null;
+			}
+			
+			if(first.getIcon()==pieces.get("knight1-black")||first.getIcon()==pieces.get("knight1-white")||
+				first.getIcon()==pieces.get("knight2-black")||first.getIcon()==pieces.get("knight2-white")){
+
+				if((i==k-1&&j==l-2)||(i==k+1&&j==l-2)||(i==k-2&&j==l-1)||(i==k+2&&j==l-1)||
+				   (i==k-2&&j==l+1)||(i==k+2&&j==l+1)||(i==k-1&&j==l+2)||(i==k+1&&j==l+2)){    // this is for the horse movements
+	        	
+	        		if(isIconThere(i,j)==true){
+	        			if(isWhite(k,l)==true&&isWhite(i,j)==true){
+                            first = null;
+	        			}else if(isWhite(k,l)==true&&isWhite(i,j)==false){
+	        				Square second = squares[i][j];
+							second.setPiece(first.getPiece());
+							second.setIcon(pieces.get(second.getPiece()));
+							first.setPiece(null);
+							first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							first = null;
+	        			}else if(isWhite(k,l)==false&&isWhite(i,j)==true){
+	        				Square second = squares[i][j];
+							second.setPiece(first.getPiece());
+							second.setIcon(pieces.get(second.getPiece()));
+							first.setPiece(null);
+							first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							first = null;
+	        			}else{
+	        				first = null;
+	        			}
+
+	        		}else{
+	        			Square second = squares[i][j];
+						second.setPiece(first.getPiece());
+						second.setIcon(pieces.get(second.getPiece()));
+						first.setPiece(null);
+						first.setIcon(new ImageIcon(
+			                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+						first = null;
+	        		}
+	        		
+					
+				}
+			}
+			 if(first.getIcon()==pieces.get("pawn1-black")||first.getIcon()==pieces.get("pawn1-white")||
+			 	first.getIcon()==pieces.get("pawn2-black")||first.getIcon()==pieces.get("pawn2-white")||
+			 	first.getIcon()==pieces.get("pawn3-black")||first.getIcon()==pieces.get("pawn3-white")||
+			 	first.getIcon()==pieces.get("pawn4-black")||first.getIcon()==pieces.get("pawn4-white")||
+			 	first.getIcon()==pieces.get("pawn5-black")||first.getIcon()==pieces.get("pawn5-white")||
+			 	first.getIcon()==pieces.get("pawn6-black")||first.getIcon()==pieces.get("pawn6-white")||
+			 	first.getIcon()==pieces.get("pawn7-black")||first.getIcon()==pieces.get("pawn7-white")||
+			 	first.getIcon()==pieces.get("pawn8-black")||first.getIcon()==pieces.get("pawn8-white")){	
+
+			      // this is for the pawns movements
+                
+  
+
+				if((i==k+1 && j==l&&k<8)||(i==k-1&&j==l&&k>=0)){       // this is for the pawns movements
+	                
+	                if(isIconThere(i,j)==false){
+		        		Square second = squares[i][j];
+						second.setPiece(first.getPiece());
+						second.setIcon(pieces.get(second.getPiece()));
+						first.setPiece(null);
+						first.setIcon(new ImageIcon(
+			                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+						first = null;
+					}else{
+						first = null;
+					}
+				}else if((i==k-1&&j==l-1)||(i==k-1&&j==l+1)){
+					if(isIconThere(i,j)==true){
+						if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
+			        		Square second = squares[i][j];
+							second.setPiece(first.getPiece());
+							second.setIcon(pieces.get(second.getPiece()));
+							first.setPiece(null);
+							first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							first = null;
+						}else{
+							first = null;
+						}
+					}else{
+						first = null;
+					}
+				}else if((i==k+1&&j==l-1)||(i==k+1&&j==l+1)){
+					if(isIconThere(i,j)==true){
+						if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
+			        		Square second = squares[i][j];
+							second.setPiece(first.getPiece());
+							second.setIcon(pieces.get(second.getPiece()));
+							first.setPiece(null);
+							first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							first = null;
+						}else{
+							first = null;
+						}
+					}else{
+						first = null;
+					}
+				}else if(k==6&&i==k-2||k==1&&i==k+2){
+					if(isIconThere(i,j)==false){
+		        		Square second = squares[i][j];
+						second.setPiece(first.getPiece());
+						second.setIcon(pieces.get(second.getPiece()));
+						first.setPiece(null);
+						first.setIcon(new ImageIcon(
+			                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+						first = null;
+					}else{
+						first = null;
+					}
+				}else{
+					first = null;
+				}
+
+				// break;
+			// }
+			}		
+
+
+			// for the queen movements
+                
+            if(first.getIcon()==pieces.get("queen-black")||first.getIcon()==pieces.get("queen-white")){
+                if((i<=k-1&&j<=l-1&&i-k==j-l)||(i>=k+1&&j<=l-1&&k-i==j-l)||(i<=k-1&&j>=l+1&&i-k==l-j)||
+                   (i>=k+1&&j>=l+1&&k-i==l-j)||(i>=0&&i<=7&&j==l)||(i==k&&j>=0&&j<=7)){	
+ 	
+					if(isIconInWay(i,j)==false){
+						if(isIconThere(i,j)==true){
+							if(isWhite(k,l)==true&&isWhite(i,j)==false){
+								Square second = squares[i][j];
+								second.setPiece(first.getPiece());
+								second.setIcon(pieces.get(second.getPiece()));
+								first.setPiece(null);
+								first.setIcon(new ImageIcon(
+					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+								first = null;
+							}else if(isWhite(k,l)==false&&isWhite(i,j)==true){
+								Square second = squares[i][j];
+								second.setPiece(first.getPiece());
+								second.setIcon(pieces.get(second.getPiece()));
+								first.setPiece(null);
+								first.setIcon(new ImageIcon(
+					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+								first = null;
+							}else{
+								first = null;
+							}
+						}else{
+							Square second = squares[i][j];
+							second.setPiece(first.getPiece());
+							second.setIcon(pieces.get(second.getPiece()));
+							first.setPiece(null);
+							first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							first = null;
+						}
+		        		
+					}else{
+						first = null;
+					}
+
+				}else{
+					first = null;
+				}
+			}	
+
+
+					 
+
 		}
 	}
+	  
 
 	public static void main(String[] args){
 		EventQueue.invokeLater(() ->{
