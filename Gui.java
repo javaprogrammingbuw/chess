@@ -18,8 +18,8 @@ public class Gui extends JFrame{
 	private JButton calcBtn;
 	private HashMap<String,ImageIcon> pieces = new LinkedHashMap<>();
 	private Square first = null;
-	public int xis;
-	public int yxis;
+	public int xis, xking;
+	public int yxis, yking;
 	public int k,l;
 	public int white = 0 ;
 	public int black = 0;
@@ -38,6 +38,18 @@ public class Gui extends JFrame{
 
     public void setYxis(int y){
     	this.yxis = y;
+    }
+    public int getXking(){
+		return this.xking;
+    }
+    public int getYking(){
+    	return this.yking;
+    }
+    public void setXking(int x){
+    	this.xking = x;
+    }
+    public void setYking(int y){
+    	this.yking = y;
     }
 
 	public Gui(){
@@ -315,6 +327,19 @@ public class Gui extends JFrame{
 			return 0;
 		}
 	}
+
+	private boolean noBackStep(int i, int j){
+		k = getXis();
+		l = getYxis();
+		if((i<=k&&isWhite(k,l)==true)||(i>=k&&isWhite(k,l)==false)){
+			return false;
+		}else{
+			return true;
+		}
+	}
+	private void check(int i, int j){
+		
+	}
 	private void submit(){
 		k = getXis();
 		l = getYxis();
@@ -412,9 +437,9 @@ public class Gui extends JFrame{
                 
   
 
-				if((i==k+1 && j==l&&k<8)||(i==k-1&&j==l&&k>=0)){       // this is for the pawns movements
+				if((i==k+1 && j==l&&k<8)||(i==k-1&&j==l&&k>=0)||(k==6&&i==k-2||k==1&&i==k+2)){       // this is for the pawns movements
 	                
-	                if(isIconThere(i,j)==false){
+	                if(isIconThere(i,j)==false && noBackStep(i,j)==true){
 		        		Square second = squares[i][j];
 						second.setPiece(first.getPiece());
 						second.setIcon(pieces.get(second.getPiece()));
@@ -425,7 +450,7 @@ public class Gui extends JFrame{
 					}else{
 						first = null;
 					}
-				}else if((i==k-1&&j==l-1)||(i==k-1&&j==l+1)){
+				}else if((i==k-1&&j==l-1)||(i==k-1&&j==l+1)||(i==k+1&&j==l-1)||(i==k+1&&j==l+1)){
 					if(isIconThere(i,j)==true){
 						if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
 			        		Square second = squares[i][j];
@@ -438,34 +463,6 @@ public class Gui extends JFrame{
 						}else{
 							first = null;
 						}
-					}else{
-						first = null;
-					}
-				}else if((i==k+1&&j==l-1)||(i==k+1&&j==l+1)){
-					if(isIconThere(i,j)==true){
-						if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
-			        		Square second = squares[i][j];
-							second.setPiece(first.getPiece());
-							second.setIcon(pieces.get(second.getPiece()));
-							first.setPiece(null);
-							first.setIcon(new ImageIcon(
-				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-							first = null;
-						}else{
-							first = null;
-						}
-					}else{
-						first = null;
-					}
-				}else if(k==6&&i==k-2||k==1&&i==k+2){
-					if(isIconThere(i,j)==false){
-		        		Square second = squares[i][j];
-						second.setPiece(first.getPiece());
-						second.setIcon(pieces.get(second.getPiece()));
-						first.setPiece(null);
-						first.setIcon(new ImageIcon(
-			                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-						first = null;
 					}else{
 						first = null;
 					}
