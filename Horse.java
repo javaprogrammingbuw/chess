@@ -1,48 +1,76 @@
 
+import java.awt.image.BufferedImage;
+import javax.swing.*;
 
 public class Horse{
-	public Square originPoint = null;
-	public Square reachingPoint;
-	public Gui gui;
+	
+	private Gui gui;
 
-	public Horse(int i, int j){
-		originPoint = new Square[i][j];
+	public void moveKnight(int i, int j){
+		System.out.println(gui.isIconThere(1,5));
+		int k = gui.getXis();
+		int l = gui.getYxis();
+		if((i==k-1&&j==l-2)||(i==k+1&&j==l-2)||(i==k-2&&j==l-1)||(i==k+2&&j==l-1)||
+				   (i==k-2&&j==l+1)||(i==k+2&&j==l+1)||(i==k-1&&j==l+2)||(i==k+1&&j==l+2)){    // this is for the horse movements
+	        	
+	        		if(gui.isIconThere(i,j)==true){
+	        			if((gui.isBlack(k,l)==true&&gui.isBlack(i,j)==false)||(gui.isBlack(k,l)==false&&gui.isBlack(i,j)==true)){
+	        				Square second = gui.squares[i][j];
+							second.setPiece(gui.first.getPiece());
+							second.setIcon(gui.pieces.get(second.getPiece()));
+							gui.first.setPiece(null);
+							gui.first.setIcon(new ImageIcon(
+				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+							gui.first = null;
+							gui.setPreX(i);
+							gui.setPreY(j);
+							if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight1-white"){
+								gui.setXknight1_white(i);
+								gui.setYknight1_white(j);
+							}else if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight2-white"){
+								gui.setXknight2_white(i);
+								gui.setYknight2_white(j);
+							}else if(gui.isBlack(i,j)==true&&gui.squares[i][j].piece=="knight1-black"){
+								gui.setXknight1_black(i);
+								gui.setYknight1_black(j);
+							}else {
+								gui.setXknight2_black(i);
+								gui.setYknight2_black(j);
+							}
+							gui.check();
+                             
+	        			}else{
+	        				gui.first = null;
+	        			}
+
+	        		}else{
+	        			Square second = gui.squares[i][j];
+						second.setPiece(gui.first.getPiece());
+						second.setIcon(gui.pieces.get(second.getPiece()));
+						gui.first.setPiece(null);
+						gui.first.setIcon(new ImageIcon(
+			                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+						gui.first = null;
+						gui.setPreX(i);
+						gui.setPreY(j);
+						if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight1-white"){
+								gui.setXknight1_white(i);
+								gui.setYknight1_white(j);
+							}else if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight2-white"){
+								gui.setXknight2_white(i);
+								gui.setYknight2_white(j);
+							}else if(gui.isBlack(i,j)==true&&gui.squares[i][j].piece=="knight1-black"){
+								gui.setXknight1_black(i);
+								gui.setYknight1_black(j);
+							}else {
+								gui.setXknight2_black(i);
+								gui.setYknight2_black(j);
+							}
+						gui.check();
+						
+	        		}
+	        		
+					
+				}
 	}
-     public Square getOriginPoint(){
-     	return originPoint;
-     }
-     public Square getReachingPoint(){
-     	return reachingPoint;
-     }
-     public void setOriginPoint(Square originPoint){
-     	this.originPoint=originPoint;
-     }
-     public void setReachingPoint(Square reachingPoint){
-     	this.reachingPoint=reachingPoint;
-     }
-     public int getPosition(){
-     	return int i;
-     }
-     public void moveKnight(){
-         
-     }
-     public boolean checiingSquare(){
-        int i=gui.getXis();
-		int j=gui.getYxis();
-
-     	if(originPoint == null){
-     		originPoint = gui.squares[i][j];
-     	}else{
-     		if((i==i-1&&j==j-2)||(i==i+1&&j==j-2)||(i==i-2&&j==j-1)||(i==i+2&&j==j-1)||
-				(i==i-2&&j==j+1)||(i==i+2&&j==j+1)||(i==i-1&&j==j+2)||(i==i+1&&j==j+2)){
-                reachingPoint = gui.squares[i][j];
-                reachingPoint.setPiece(first.getPiece());
-				reachingPoint.setIcon(pieces.get(second.getPiece()));
-				originPoint.setPiece(nujj);
-				originPoint.setIcon(new ImageIcon(
-                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-				originPoint = null;
-     		}
- 		}
-     }
 }

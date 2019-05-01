@@ -12,18 +12,20 @@ public class Gui extends JFrame{
 	private JPanel contentPane;
 	private JPanel chessBoard;
 	private JPanel buttonPane;
-	private Square[][] squares = new Square[8][8];
+	public Square[][] squares = new Square[8][8];
 	private JTextField tf1;
 	private JTextField tf2;
 	private JButton calcBtn;
-	private HashMap<String,ImageIcon> pieces = new LinkedHashMap<>();
-	private Square first = null;
+	public HashMap<String,ImageIcon> pieces = new LinkedHashMap<>();
+	public Square first = null;
+	private Horse horse = new Horse();
 
-	public int xis, xking_black=7, xking_white=0, previousX, xknight1_white=0, xknight1_black=7, xknight2_white=0, xknight2_black=7;
-	public int yxis, yking_black=3, yking_white=4, previousY, yknight1_white=1, yknight1_black=1, yknight2_white=6, yknight2_black=6;
+	public int xis, xking_black=7, xking_white=0, previousX, xknight1_white=0, xknight1_black=7, xknight2_white=0, xknight2_black=7, xturn;
+	public int yxis, yking_black=3, yking_white=4, previousY, yknight1_white=1, yknight1_black=1, yknight2_white=6, yknight2_black=6, yturn;
 	public int k,l;
 	public int white = 0 ;
 	public int black = 0;
+
 
 	public int getXis(){
 		return this.xis;
@@ -127,6 +129,19 @@ public class Gui extends JFrame{
     }
     public void setPreY(int y){
     	this.previousY = y;
+    }
+    // for turns 
+    public int getXturn(){
+    	return xturn;
+    }
+    public int getYturn(){
+    	return yturn;
+    }
+    public void setXturn(int x){
+    	this.xturn = x;
+    }
+    public void setYturn(int y){
+    	this.yturn = y;
     }
 
 
@@ -319,7 +334,7 @@ public class Gui extends JFrame{
 		}
 
 	}
-	private boolean isIconThere(int i, int j){
+	public boolean isIconThere(int i, int j){
 		if(squares[i][j].piece==null){
 			return false;
 		}else{
@@ -327,7 +342,7 @@ public class Gui extends JFrame{
 		}
 	}
 
-	private boolean isIconInWay(int i, int j, int y, int d){
+	public boolean isIconInWay(int i, int j, int y, int d){
 		if(y==getXis()&&d==getYxis()){
 			k = getXis();
 			l = getYxis();
@@ -386,13 +401,13 @@ public class Gui extends JFrame{
 			return false;
 	}
 
-	private boolean isWhite(int i, int j){
-		if(squares[i][j].getIcon()==pieces.get("rook1-white")||squares[i][j].getIcon()==pieces.get("rook2-white")||squares[i][j].getIcon()==pieces.get("knight1-white")||
-			squares[i][j].getIcon()==pieces.get("knight2-white")||squares[i][j].getIcon()==pieces.get("bishop1-white")||squares[i][j].getIcon()==pieces.get("bishop2-white")||
-			squares[i][j].getIcon()==pieces.get("queen-white")||squares[i][j].getIcon()==pieces.get("king-white")||squares[i][j].getIcon()==pieces.get("pawn1-white")||
-			squares[i][j].getIcon()==pieces.get("pawn2-white")||squares[i][j].getIcon()==pieces.get("pawn3-white")||squares[i][j].getIcon()==pieces.get("pawn4-white")||
-			squares[i][j].getIcon()==pieces.get("pawn5-white")||squares[i][j].getIcon()==pieces.get("pawn6-white")||squares[i][j].getIcon()==pieces.get("pawn7-white")||
-			squares[i][j].getIcon()==pieces.get("pawn8-white")){
+	public boolean isBlack(int i, int j){
+		if(squares[i][j].getIcon()==pieces.get("rook1-black")||squares[i][j].getIcon()==pieces.get("rook2-black")||squares[i][j].getIcon()==pieces.get("knight1-black")||
+			squares[i][j].getIcon()==pieces.get("knight2-black")||squares[i][j].getIcon()==pieces.get("bishop1-black")||squares[i][j].getIcon()==pieces.get("bishop2-black")||
+			squares[i][j].getIcon()==pieces.get("queen-black")||squares[i][j].getIcon()==pieces.get("king-black")||squares[i][j].getIcon()==pieces.get("pawn1-black")||
+			squares[i][j].getIcon()==pieces.get("pawn2-black")||squares[i][j].getIcon()==pieces.get("pawn3-black")||squares[i][j].getIcon()==pieces.get("pawn4-black")||
+			squares[i][j].getIcon()==pieces.get("pawn5-black")||squares[i][j].getIcon()==pieces.get("pawn6-black")||squares[i][j].getIcon()==pieces.get("pawn7-black")||
+			squares[i][j].getIcon()==pieces.get("pawn8-black")){
 			return true;
 
 		}else{
@@ -400,29 +415,29 @@ public class Gui extends JFrame{
 		}
 	}
 
-	private int checksFigure(){
+	public int checksFigure(){
 		k = getXis();
 		l = getYxis();
 		
-		if(isWhite(k,l)==true){
+		if(isBlack(k,l)==false){
            return white++;
-		}else if(isWhite(k,l)==false){
+		}else if(isBlack(k,l)==true){
 			return black++;
 		}else{
 			return 0;
 		}
 	}
 
-	private boolean noBackStep(int i, int j){
+	public boolean noBackStep(int i, int j){
 		k = getXis();
 		l = getYxis();
-		if((i<=k&&isWhite(k,l)==true)||(i>=k&&isWhite(k,l)==false)){
+		if((i<=k&&isBlack(k,l)==false)||(i>=k&&isBlack(k,l)==true)){
 			return false;
 		}else{
 			return true;
 		}
 	}
-	private void check(){
+	public void check(){
 
 		int i = getPreX();
 		int j = getPreY();
@@ -432,7 +447,7 @@ public class Gui extends JFrame{
          	
          	}else if(squares[i][j].getIcon()==pieces.get("knight1-white")||squares[i][j].getIcon()==pieces.get("knight2-white")||squares[i][j].getIcon()==pieces.get("knight1-black")||
          	         squares[i][j].getIcon()==pieces.get("knight2-black")){
-         		    if(isWhite(i,j) == true){
+         		    if(isBlack(i,j) == false){
          		    	if((i-1==getXking_black()&&j-2==getYking_black())||(i+1==getXking_black()&&j-2==getYking_black())||(i-2==getXking_black()&&j-1==getYking_black())
          		    		||(i+2==getXking_black()&&j-1==getYking_black())||(i-2==getXking_black()&&j+1==getYking_black())||(i+2==getXking_black()&&j+1==getYking_black())
          		    		||(i-1==getXking_black()&&j+2==getYking_black())||(i+1==getXking_black()&&j+2==getYking_black()))  squares[getXking_black()][getYking_black()].setBackground(Color.RED);
@@ -451,7 +466,7 @@ public class Gui extends JFrame{
          	}else if(squares[i][j].getIcon()==pieces.get("queen-white")||squares[i][j].getIcon()==pieces.get("queen-black")){
          		int bx = getXking_black(), by = getYking_black();
          		int wx = getXking_white(), wy = getYking_white(); 
-         			if(isWhite(i,j) == false){
+         			if(isBlack(i,j) == true){
          				if((wx<=i-1&&wy<=j-1&&wx-i==wy-j)||(wx>=i+1&&wy<=j-1&&i-wx==wy-j)||(wx<=i-1&&wy>=j+1&&wx-i==j-wy)||
                    		(wx>=i+1&&wy>=j+1&&i-wx==j-wy)||(wx>=0&&wx<=7&&wy==j)||(wx==i&&wy>=0&&wy<=7)){
          					if(isIconInWay(wx, wy, i, j) == false){
@@ -473,7 +488,7 @@ public class Gui extends JFrame{
 	         	      squares[i][j].getIcon()==pieces.get("pawn2-black")||squares[i][j].getIcon()==pieces.get("pawn3-black")||squares[i][j].getIcon()==pieces.get("pawn4-black")||
 	         	      squares[i][j].getIcon()==pieces.get("pawn5-black")||squares[i][j].getIcon()==pieces.get("pawn6-black")||squares[i][j].getIcon()==pieces.get("pawn7-black")||
 	         	      squares[i][j].getIcon()==pieces.get("pawn8-black")){
-         		if(isWhite(i,j)==true){
+         		if(isBlack(i,j)==false){
          			if(i+1==getXking_black()&&j-1==getYking_black()||i+1==getXking_black()&&j+1==getYking_black()){
          				squares[getXking_black()][getYking_black()].setBackground(Color.RED);
          			} 
@@ -485,7 +500,7 @@ public class Gui extends JFrame{
          	
          	}
 		}
-	private String direction_1(int i, int j ){
+	public String direction_1(int i, int j ){
 		  
 		for(int s=i-1; s>=0&&j>=0&&j<=7; s--){
            if(isIconThere(s,j)==true){
@@ -494,7 +509,7 @@ public class Gui extends JFrame{
         }
         return "king-white";
     }
-    private String direction_2(int i, int j ){
+    public String direction_2(int i, int j ){
 		 
 		for(int n=j-1; n>=0&&i>=0&&i<=7; n--){
            if(isIconThere(i,n)==true){
@@ -503,7 +518,7 @@ public class Gui extends JFrame{
         }
         return "king-white";
     }
-    private String direction_3(int i, int j ){
+    public String direction_3(int i, int j ){
          
 		for(int s=i+1; s<=7&&j>=7&&j<=0; s++){
 			if(isIconThere(s,j)==true){
@@ -512,7 +527,7 @@ public class Gui extends JFrame{
 		}
 		return "king-white";
 	}
-	private String direction_4(int i, int j ){
+	public String direction_4(int i, int j ){
 		
 		for(int n=j+1; n<=7&&i>=7&&i<=0; n++){
            if(isIconThere(i,n)==true){
@@ -521,7 +536,7 @@ public class Gui extends JFrame{
         }
         return "king-white";
     }
-	private String direction_5(int i, int j ){
+	public String direction_5(int i, int j ){
 		
 		for(int s=i-1,n=j-1; s>=0&&n>0&&i-s==j-n; s--,n--){
 			if(isIconThere(s,n)==true){
@@ -530,7 +545,7 @@ public class Gui extends JFrame{
 		}
 		return "king-white";
 	}
-	private String direction_6(int i, int j ){
+	public String direction_6(int i, int j ){
 		 
 		for(int k=i+1,l=j+1; k<=7&&l<=7&&k-i==l-j; k++,l++){
            if(isIconThere(k,l)==true){
@@ -539,7 +554,7 @@ public class Gui extends JFrame{
         }
         return "king-white";
     }
-	private String direction_7(int i, int j ){
+	public String direction_7(int i, int j ){
 		
 		for(int s=i+1,n=j-1; s<=7&&n>0&&s-i==j-n; s++,n--){
 			if(isIconThere(s,n)==true){
@@ -548,7 +563,7 @@ public class Gui extends JFrame{
 		}
 		return "king-white";
 	}
-    private String direction_8(int i, int j){
+    public String direction_8(int i, int j){
 		
 		for(int k=i-1,l=j+1; k>=0&&l<=7&&i-k==l-j; k--,l++){
            if(isIconThere(k,l)==true){
@@ -559,7 +574,7 @@ public class Gui extends JFrame{
     }
 
 
-	private boolean pointingToCheck(int i, int j, int color){
+	public boolean pointingToCheck(int i, int j, int color){
 		
          int x1, y1,x2, y2  ;
 		
@@ -619,11 +634,11 @@ public class Gui extends JFrame{
 		}
 		return false;
 	}
-	private void checkingSquareForKing(int i, int j){
+	public void checkingSquareForKing(int i, int j){
 		int wx = getXking_white(), wy = getYking_white();
 		int bx = getXking_black(), by = getYking_black();
 
-           if(isWhite(i,j)==false){
+           if(isBlack(i,j)==true){
            	  for(int d=bx-1; d<=bx+1; d++){
            	  	 for(int y=by-1; y<=by+1; y++){
            	  	 	if(d<=7&&d>=0&&y<=7&&y>=0){
@@ -638,7 +653,7 @@ public class Gui extends JFrame{
            	  	 }
            	  }
            	    
-           }else if(isWhite(i,j)==true){
+           }else if(isBlack(i,j)==false){
 
            		for(int n=wx-1; n<=wx+1; n++){
            	  		for(int s=wy-1; s<=wy+1; s++){
@@ -672,11 +687,11 @@ public class Gui extends JFrame{
 	// 	}
 	// }
 
-	private void submit(){
+	public void submit(){
 		k = getXis();
 		l = getYxis();
 		
-		if(isWhite(k,l)==false){
+		if(isBlack(k,l)==true){
 			tf1.setText("the black checks till now: "+checksFigure());
 			System.out.println(white+checksFigure());
 		}else{
@@ -685,8 +700,9 @@ public class Gui extends JFrame{
 	}
 
 
-	private void movePiece(int i, int j){
+	public void movePiece(int i, int j){
 		if(first==null){
+
 			first=squares[i][j];
 			setXis(i);
 			setYxis(j);
@@ -707,6 +723,8 @@ public class Gui extends JFrame{
 			
 			k=getXis();
 			l=getYxis();
+	
+			if((isBlack(getXturn(), getYturn())==true&&isBlack(k,l)==false)||(isBlack(getXturn(), getYturn())==false&&isBlack(k,l)==true)){
 			if(first.getBackground()==Color.RED){
 				if ((k % 2 == 1 && l % 2 == 1)|| (k % 2 == 0 && l % 2 == 0)) {
                     first.setBackground(Color.WHITE);
@@ -744,7 +762,7 @@ public class Gui extends JFrame{
 				   (i==k-2&&j==l+1)||(i==k+2&&j==l+1)||(i==k-1&&j==l+2)||(i==k+1&&j==l+2)){    // this is for the horse movements
 	        	
 	        		if(isIconThere(i,j)==true){
-	        			if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
+	        			if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){
 	        				Square second = squares[i][j];
 							second.setPiece(first.getPiece());
 							second.setIcon(pieces.get(second.getPiece()));
@@ -754,13 +772,15 @@ public class Gui extends JFrame{
 							first = null;
 							setPreX(i);
 							setPreY(j);
-							if(isWhite(i,j)==true&&squares[i][j].piece=="knight1-white"){
+							setXturn(i);
+							setYturn(j);
+							if(isBlack(i,j)==false&&squares[i][j].piece=="knight1-white"){
 								setXknight1_white(i);
 								setYknight1_white(j);
-							}else if(isWhite(i,j)==true&&squares[i][j].piece=="knight2-white"){
+							}else if(isBlack(i,j)==false&&squares[i][j].piece=="knight2-white"){
 								setXknight2_white(i);
 								setYknight2_white(j);
-							}else if(isWhite(i,j)==false&&squares[i][j].piece=="knight1-black"){
+							}else if(isBlack(i,j)==true&&squares[i][j].piece=="knight1-black"){
 								setXknight1_black(i);
 								setYknight1_black(j);
 							}else {
@@ -783,13 +803,15 @@ public class Gui extends JFrame{
 						first = null;
 						setPreX(i);
 						setPreY(j);
-						if(isWhite(i,j)==true&&squares[i][j].piece=="knight1-white"){
+						setXturn(i);
+						setYturn(j);
+						if(isBlack(i,j)==false&&squares[i][j].piece=="knight1-white"){
 								setXknight1_white(i);
 								setYknight1_white(j);
-							}else if(isWhite(i,j)==true&&squares[i][j].piece=="knight2-white"){
+							}else if(isBlack(i,j)==false&&squares[i][j].piece=="knight2-white"){
 								setXknight2_white(i);
 								setYknight2_white(j);
-							}else if(isWhite(i,j)==false&&squares[i][j].piece=="knight1-black"){
+							}else if(isBlack(i,j)==true&&squares[i][j].piece=="knight1-black"){
 								setXknight1_black(i);
 								setYknight1_black(j);
 							}else {
@@ -802,6 +824,8 @@ public class Gui extends JFrame{
 	        		
 					
 				}
+				
+
 			}
 
 			 if(squares[k][l].getIcon()==pieces.get("pawn1-black")||squares[k][l].getIcon()==pieces.get("pawn1-white")||
@@ -830,13 +854,15 @@ public class Gui extends JFrame{
 						first = null;
 						setPreX(i);
 						setPreY(j);
+						setXturn(i);
+						setYturn(j);
 						check();
 					}else{
 						first = null;
 					}
                 }else if((i==k+1&&j==l-1||i==k+1&&j==l+1)||(i==k-1&&j==l-1||i==k-1&&j==l+1)){
 					if(isIconThere(i,j)==true){
-						if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){
+						if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){
 			        		Square second = squares[i][j];
 							second.setPiece(first.getPiece());
 							second.setIcon(pieces.get(second.getPiece()));
@@ -846,6 +872,8 @@ public class Gui extends JFrame{
 							first = null;
 							setPreX(i);
 							setPreY(j);
+							setXturn(i);
+							setYturn(j);
 							check();
 						}else{
 							first = null;
@@ -870,7 +898,7 @@ public class Gui extends JFrame{
  	
 					if(isIconInWay(i,j,k,l)==false){
 						if(isIconThere(i,j)==true){
-							if(isWhite(k,l)==true&&isWhite(i,j)==false){
+							if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){
 								Square second = squares[i][j];
 								second.setPiece(first.getPiece());
 								second.setIcon(pieces.get(second.getPiece()));
@@ -880,17 +908,8 @@ public class Gui extends JFrame{
 								first = null;
 								setPreX(i);
 								setPreY(j);
-								check();
-							}else if(isWhite(k,l)==false&&isWhite(i,j)==true){
-								Square second = squares[i][j];
-								second.setPiece(first.getPiece());
-								second.setIcon(pieces.get(second.getPiece()));
-								first.setPiece(null);
-								first.setIcon(new ImageIcon(
-					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-								first = null;
-								setPreX(i);
-								setPreY(j);
+								setXturn(i);
+								setYturn(j);
 								check();
 							}else{
 								first = null;
@@ -905,6 +924,8 @@ public class Gui extends JFrame{
 							first = null;
 							setPreX(i);
 							setPreY(j);
+							setXturn(i);
+							setYturn(j);
 							check();
 						}
 		        		
@@ -924,7 +945,7 @@ public class Gui extends JFrame{
 			 if(squares[k][l].getIcon()==pieces.get("king-black")||squares[k][l].getIcon()==pieces.get("king-white")){
 	                if((i==k+1 && j==l) || (i==k-1 && j==l) || (i==k && j==l+1) || (i==k && j==l-1) || (i==k+1 && j==l+1) || (i==k+1 && j==l-1) || (i==k-1 && j==l-1) || (i==k-1 && j==l+1) ){		
 			        	if(isIconThere(i,j)==true){
-	                		if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){		
+	                		if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){		
 				        		Square second = squares[i][j];
 								second.setPiece(first.getPiece());
 								second.setIcon(pieces.get(second.getPiece()));
@@ -932,7 +953,9 @@ public class Gui extends JFrame{
 								first.setIcon(new ImageIcon(
 					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
 								first = null;
-								if(isWhite(i,j)==true){
+								setXturn(i);
+								setYturn(j);
+								if(isBlack(i,j)==false){
 									setXking_white(i);
 									setYking_white(j);
 
@@ -952,7 +975,9 @@ public class Gui extends JFrame{
 							first.setIcon(new ImageIcon(
 				                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
 							first = null;
-							if(isWhite(i,j)==true){
+							setXturn(i);
+							setYturn(j);
+							if(isBlack(i,j)==false){
 								setXking_white(i);
 								setYking_white(j);
 							}else{
@@ -1009,10 +1034,13 @@ public class Gui extends JFrame{
 			 // }	
 
 
-					 
-
-		}
+	}else {
+		first = null;
 	}
+	}
+
+
+}
 	  
 
 	public static void main(String[] args){
