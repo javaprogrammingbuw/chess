@@ -20,8 +20,8 @@ public class Gui extends JFrame{
 	public Square first = null;
 	private Horse horse = new Horse();
 
-	public int xis, xking_black=7, xking_white=0, previousX, xknight1_white=0, xknight1_black=7, xknight2_white=0, xknight2_black=7, xturn;
-	public int yxis, yking_black=3, yking_white=4, previousY, yknight1_white=1, yknight1_black=1, yknight2_white=6, yknight2_black=6, yturn;
+	public int xis, xking_black=7, xking_white=0, previousX, xknight1_white=0, xknight1_black=7, xknight2_white=0, xknight2_black=7, xturn=7;
+	public int yxis, yking_black=3, yking_white=4, previousY, yknight1_white=1, yknight1_black=1, yknight2_white=6, yknight2_black=6, yturn=7;
 	public int k,l;
 	public int white = 0 ;
 	public int black = 0;
@@ -444,6 +444,19 @@ public class Gui extends JFrame{
     // it should target the black king
             if(squares[i][j].getIcon()==pieces.get("rook1-white")||squares[i][j].getIcon()==pieces.get("rook2-white")||squares[i][j].getIcon()==pieces.get("rook1-black")||
                squares[i][j].getIcon()==pieces.get("rook2-black")){
+               	if(isBlack(i,j) == true){
+               		if((getXking_white()<=7 && getXking_white()>=0 && j==getYking_white()) || (i==getXking_white() && getYking_white()>=0 &&getYking_white()<=7)){
+               		    if(isIconInWay(getXking_white(), getYking_white(), i, j)==false){
+                         	squares[getXking_white()][getYking_white()].setBackground(Color.RED);
+                    	}
+               		} 
+               	}else{
+               		if((getXking_black()<=7 && getXking_black()>=0 && j==getYking_black()) || (i==getXking_black() && getYking_black()>=0 &&getYking_black()<=7)){
+               		    if(isIconInWay(getXking_black(), getYking_black(), i, j)==false){
+                         	squares[getXking_black()][getYking_black()].setBackground(Color.RED);
+                    	}
+               		} 
+               	}
          	
          	}else if(squares[i][j].getIcon()==pieces.get("knight1-white")||squares[i][j].getIcon()==pieces.get("knight2-white")||squares[i][j].getIcon()==pieces.get("knight1-black")||
          	         squares[i][j].getIcon()==pieces.get("knight2-black")){
@@ -461,6 +474,23 @@ public class Gui extends JFrame{
          	
          	}else if(squares[i][j].getIcon()==pieces.get("bishop1-white")||squares[i][j].getIcon()==pieces.get("bishop2-white")||squares[i][j].getIcon()==pieces.get("bishop1-black")||
          	         squares[i][j].getIcon()==pieces.get("bishop2-black")){
+         		int xw = getXking_white(), yw = getYking_white();
+         		int xb = getXking_black(), yb = getYking_black();
+         			if(isBlack(i,j) == true){
+         				if((xw<=i-1&&yw<=j-1&&xw-i==yw-j)||(xw>=i+1&&yw<=j-1&&i-xw==yw-j)||(xw<=i-1&&yw>=j+1&&xw-i==j-yw)||
+                   			(xw>=i+1&&yw>=j+1&&i-xw==j-yw)){
+     						if(isIconInWay(xw, yw, i, j) == false){
+                            	squares[xw][yw].setBackground(Color.RED);
+                            }
+         				}
+         			}else {
+         				if((xb<=i-1&&yb<=j-1&&xb-i==yb-j)||(xb>=i+1&&yb<=j-1&&i-xb==yb-j)||(xb<=i-1&&yb>=j+1&&xb-i==j-yb)||
+                   			(xb>=i+1&&yb>=j+1&&i-xb==j-yb)){
+         					if(isIconInWay(xb, yb,i ,j) == false){
+                            	squares[xb][yb].setBackground(Color.RED);
+                            }
+         				}
+         			}
 
          	
          	}else if(squares[i][j].getIcon()==pieces.get("queen-white")||squares[i][j].getIcon()==pieces.get("queen-black")){
@@ -593,15 +623,21 @@ public class Gui extends JFrame{
 				
 				return true;
 			}else if(i+1<=7&&i+1>=0&&j-1<=7&&j-1>=0&&j+1<=7&&j+1>=0){
-				        if(squares[i+1][j-1].getIcon()==pieces.get("pawn1-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn2-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn3-black")||
+		        if(squares[i+1][j-1].getIcon()==pieces.get("pawn1-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn2-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn3-black")||
 				     squares[i+1][j-1].getIcon()==pieces.get("pawn4-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn5-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn6-black")||
 				     squares[i+1][j-1].getIcon()==pieces.get("pawn7-black")||squares[i+1][j-1].getIcon()==pieces.get("pawn8-black")||squares[i+1][j+1].getIcon()==pieces.get("pawn1-black")||
 				     squares[i+1][j+1].getIcon()==pieces.get("pawn2-black")||squares[i+1][j+1].getIcon()==pieces.get("pawn3-black")||squares[i+1][j+1].getIcon()==pieces.get("pawn4-black")||
 				     squares[i+1][j+1].getIcon()==pieces.get("pawn5-black")||squares[i+1][j+1].getIcon()==pieces.get("pawn6-black")||squares[i+1][j+1].getIcon()==pieces.get("pawn7-black")||
 				     squares[i+1][j+1].getIcon()==pieces.get("pawn8-black")){
 				      
-				       return true;
-				   		}
+				    return true;
+		   		}
+			}else if(direction_5(i,j)=="bishop1-black"||direction_6(i,j)=="bishop1-black"||direction_5(i,j)=="bishop1-black"||direction_5(i,j)=="bishop1-black"||
+				     direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"){
+				return true;
+			}else if(direction_1(i,j)=="rook1-black"||direction_1(i,j)=="rook1-black"||direction_1(i,j)=="rook1-black"||direction_1(i,j)=="rook1-black"||
+					 direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"){
+				return true;
 			}
 
 
@@ -629,6 +665,12 @@ public class Gui extends JFrame{
 				    
 				     return true;
 				        }
+			}else if(direction_5(i,j)=="bishop1-white"||direction_6(i,j)=="bishop1-white"||direction_5(i,j)=="bishop1-white"||direction_5(i,j)=="bishop1-white"||
+				     direction_5(i,j)=="bishop2-white"||direction_5(i,j)=="bishop2-white"||direction_5(i,j)=="bishop2-white"||direction_5(i,j)=="bishop2-white"){
+				return true;
+			}else if(direction_1(i,j)=="rook1-white"||direction_1(i,j)=="rook1-white"||direction_1(i,j)=="rook1-white"||direction_1(i,j)=="rook1-white"||
+					 direction_1(i,j)=="rook2-white"||direction_1(i,j)=="rook2-white"||direction_1(i,j)=="rook2-white"||direction_1(i,j)=="rook2-white"){
+				return true;
 			}
 
 		}
@@ -826,9 +868,7 @@ public class Gui extends JFrame{
 				}
 				
 
-			}
-
-			 if(squares[k][l].getIcon()==pieces.get("pawn1-black")||squares[k][l].getIcon()==pieces.get("pawn1-white")||
+			}else if(squares[k][l].getIcon()==pieces.get("pawn1-black")||squares[k][l].getIcon()==pieces.get("pawn1-white")||
 			 	squares[k][l].getIcon()==pieces.get("pawn2-black")||squares[k][l].getIcon()==pieces.get("pawn2-white")||
 			 	squares[k][l].getIcon()==pieces.get("pawn3-black")||squares[k][l].getIcon()==pieces.get("pawn3-white")||
 			 	squares[k][l].getIcon()==pieces.get("pawn4-black")||squares[k][l].getIcon()==pieces.get("pawn4-white")||
@@ -887,12 +927,8 @@ public class Gui extends JFrame{
 
 				// break;
 			// }
-			}		
-
-
-			// for the queen movements
-                
-            if(squares[k][l].getIcon()==pieces.get("queen-black")||squares[k][l].getIcon()==pieces.get("queen-white")){
+			}else if(squares[k][l].getIcon()==pieces.get("queen-black")||squares[k][l].getIcon()==pieces.get("queen-white")){
+				// for the queen movements
                 if((i<=k-1&&j<=l-1&&i-k==j-l)||(i>=k+1&&j<=l-1&&k-i==j-l)||(i<=k-1&&j>=l+1&&i-k==l-j)||
                    (i>=k+1&&j>=l+1&&k-i==l-j)||(i>=0&&i<=7&&j==l)||(i==k&&j>=0&&j<=7)){	
  	
@@ -936,14 +972,10 @@ public class Gui extends JFrame{
 				}else{
 					first = null;
 				}
-			}
-
-
-			// for the king movements
-
-
-			 if(squares[k][l].getIcon()==pieces.get("king-black")||squares[k][l].getIcon()==pieces.get("king-white")){
-	                if((i==k+1 && j==l) || (i==k-1 && j==l) || (i==k && j==l+1) || (i==k && j==l-1) || (i==k+1 && j==l+1) || (i==k+1 && j==l-1) || (i==k-1 && j==l-1) || (i==k-1 && j==l+1) ){		
+			}else if(squares[k][l].getIcon()==pieces.get("king-black")||squares[k][l].getIcon()==pieces.get("king-white")){
+				// for the king movements
+	                if((i==k+1 && j==l) || (i==k-1 && j==l) || (i==k && j==l+1) || (i==k && j==l-1) || 
+	                	(i==k+1 && j==l+1) || (i==k+1 && j==l-1) || (i==k-1 && j==l-1) || (i==k-1 && j==l+1) ){		
 			        	if(isIconThere(i,j)==true){
 	                		if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){		
 				        		Square second = squares[i][j];
@@ -990,48 +1022,91 @@ public class Gui extends JFrame{
 	                }else{
 	                	first = null;
 	                }
-			 }
-
-			// for the rook movements	 
-
-			 // if(first.getIcon()==pieces.get("rook1-black") || first.getIcon()==pieces.get("rook1-white") || (first.getIcon()==pieces.get("rook2-black") || first.getIcon()==pieces.get("rook2-white"))){
-	   //              if((i<k && j==l) || (i>k && j==l) || (i==k && j<l) || (i==k && j>l)){		
-			 //        		Square second = squares[i][j];
-				// 			second.setPiece(first.getPiece());
-				// 			second.setIcon(pieces.get(second.getPiece()));
-				// 			first.setPiece(null);
-				// 			first.setIcon(new ImageIcon(
-				//                     	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-				// 			first = null;
-				// 			check();
-	   //              }
-			 // }
-
-				// for the bishop movements	
-
-			 // if(first.getIcon()==pieces.get("bishop1-black") || first.getIcon()==pieces.get("bishop1-white") || (first.getIcon()==pieces.get("bishop2-black") || first.getIcon()==pieces.get("bishop2-white"))){
-	   //              if((i<k && j<l) || (i>k && j>l) || (i>k && j<l) || (i<k && j>l)){
-	   //              	if(isIconThere(i,j)==true){
-	   //              		if((isWhite(k,l)==true&&isWhite(i,j)==false)||(isWhite(k,l)==false&&isWhite(i,j)==true)){		
-				//         		Square second = squares[i][j];
-				// 				second.setPiece(first.getPiece());
-				// 				second.setIcon(pieces.get(second.getPiece()));
-				// 				first.setPiece(null);
-				// 				first.setIcon(new ImageIcon(
-				// 	                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-				// 				first = null;
-				// 				check();
-				// 			}else{
-				// 				first = null;
-				// 			}
-				// 		}else{
-				// 			first = null;
-				// 		}
-
-	   //              }else{
-	   //              	first = null;
-	   //              }
-			 // }	
+			 }else if(squares[k][l].getIcon()==pieces.get("rook1-black") || squares[k][l].getIcon()==pieces.get("rook1-white") || 
+			 	(squares[k][l].getIcon()==pieces.get("rook2-black") || squares[k][l].getIcon()==pieces.get("rook2-white"))){
+			 	// for the rook movements
+	                if((i<k && j==l) || (i>k && j==l) || (i==k && j<l) || (i==k && j>l)){
+	                	if(isIconInWay(i,j, k, l) == false){
+		                	if(isIconThere(i,j) == true){
+		                		if((isBlack(k,l) == true&& isBlack(i,j) == false)||(isBlack(k,l) == false && isBlack(i,j) == true)){	
+					        		Square second = squares[i][j];
+									second.setPiece(first.getPiece());
+									second.setIcon(pieces.get(second.getPiece()));
+									first.setPiece(null);
+									first.setIcon(new ImageIcon(
+						                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+									first = null;
+									setPreX(i);
+									setPreY(j);
+									setXturn(i);
+									setYturn(j);
+									check();
+								}else{
+									first = null;
+								}
+							}else{
+	                            Square second = squares[i][j];
+								second.setPiece(first.getPiece());
+								second.setIcon(pieces.get(second.getPiece()));
+								first.setPiece(null);
+								first.setIcon(new ImageIcon(
+					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+								first = null;
+								setPreX(i);
+								setPreY(j);
+								setXturn(i);
+								setYturn(j);
+								check();
+							}
+						}else{
+							first = null;
+						}
+	                }else{
+	                	first = null;
+	                }
+			 }else if(squares[k][l].getIcon()==pieces.get("bishop1-black") || squares[k][l].getIcon()==pieces.get("bishop1-white") || 
+			 	(squares[k][l].getIcon()==pieces.get("bishop2-black") || squares[k][l].getIcon()==pieces.get("bishop2-white"))){
+			 	// for the bishop movements
+	                if((i<k && j<l) || (i>k && j>l) || (i>k && j<l) || (i<k && j>l)){
+	                	if(isIconInWay(i,j, k, l) == false){
+		                	if(isIconThere(i,j)==true){
+		                		if((isBlack(k,l)==true&&isBlack(i,j)==false)||(isBlack(k,l)==false&&isBlack(i,j)==true)){		
+					        		Square second = squares[i][j];
+									second.setPiece(first.getPiece());
+									second.setIcon(pieces.get(second.getPiece()));
+									first.setPiece(null);
+									first.setIcon(new ImageIcon(
+						                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+									first = null;
+									setPreX(i);
+									setPreY(j);
+									setXturn(i);
+									setYturn(j);
+									check();
+								}else{
+									first = null;
+								}
+							}else{
+								Square second = squares[i][j];
+								second.setPiece(first.getPiece());
+								second.setIcon(pieces.get(second.getPiece()));
+								first.setPiece(null);
+								first.setIcon(new ImageIcon(
+					                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+								first = null;
+								setPreX(i);
+								setPreY(j);
+								setXturn(i);
+								setYturn(j);
+								check();
+							}
+                        }else{
+                        	first = null;
+                        }
+	                }else{
+	                	first = null;
+	                }
+			 }	
 
 
 	}else {
