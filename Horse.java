@@ -1,4 +1,3 @@
-
 import java.awt.image.BufferedImage;
 import javax.swing.*;
 
@@ -75,9 +74,7 @@ public class Horse{
 							}
 						gui.check();
 						
-	        		}
-	        		
-					
-				}
+	        		}		
+		}
 	}
 }

@@ -149,7 +149,6 @@ public class Gui extends JFrame{
     	this.yturn = y;
     }
 
-
 	public Gui(){
 		initUi();
 		initPieces();
@@ -157,14 +156,10 @@ public class Gui extends JFrame{
 
 	public void initUi(){
 		contentPane = (JPanel) getContentPane();
-
 		chessBoard = new JPanel(new GridLayout(8, 8));
 		chessBoard.setPreferredSize(new Dimension(1200, 1200));
         chessBoard.setBorder(new LineBorder(Color.BLACK));
-
         contentPane.add(chessBoard);
-
-        
 
         // create the chess board squares according to:
         // https://stackoverflow.com/questions/21077322/create-a-chess-board-with-jpanel
@@ -190,10 +185,8 @@ public class Gui extends JFrame{
         }
 
 		contentPane.setLayout(new FlowLayout());
-
         pack();
         // createGroupLayout();
-
         //Position in screen center
         setLocationRelativeTo(null);
         //Close Application when window is closed
@@ -306,7 +299,6 @@ public class Gui extends JFrame{
 		}catch(IOException e){
 			e.printStackTrace();		
 		}
-
 	}
 	public boolean isIconThere(int i, int j){
 		if(squares[i][j].piece == null){
@@ -489,8 +481,7 @@ public class Gui extends JFrame{
          			if(i-1==getXking_white()&&j-1==getYking_white()||i-1==getXking_white()&&j+1==getYking_white()){
          				squares[getXking_white()][getYking_white()].setBackground(Color.RED);
          			}
-         		}
-         	
+         		}     	
      	}
 	
 	}
@@ -596,7 +587,7 @@ public class Gui extends JFrame{
 				    squares[i+1][j+1].getIcon()==pieces.get("pawn8-black")){
 				      
 				    return true;
-		   		}
+		        	}
 			}else if(direction_5(i,j)=="bishop1-black"||direction_6(i,j)=="bishop1-black"||direction_5(i,j)=="bishop1-black"||direction_5(i,j)=="bishop1-black"||
 				     direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"||direction_5(i,j)=="bishop2-black"){
 				return true;
@@ -604,7 +595,6 @@ public class Gui extends JFrame{
 					 direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"||direction_1(i,j)=="rook2-black"){
 				return true;
 			}
-
 
 		}else{
 		    x1 = getXknight1_white(); y1 = getYknight1_white();
@@ -674,10 +664,8 @@ public class Gui extends JFrame{
        	  	 			}
        	  	 		}
        	  		}
-       	    }
-	       	    	       	    
-        }
-           	
+       	    }	       	    	       	    
+        }         	
 	}
 
 	public void movePiece(int i, int j){
@@ -759,7 +747,6 @@ public class Gui extends JFrame{
 	              		camel.moveBishop(i,j);  
 			 	}	
 
-
 			}else {
 				first = null;
 			}
@@ -768,12 +755,11 @@ public class Gui extends JFrame{
 
 	}
 	  
-
+	
 	public static void main(String[] args){
 		EventQueue.invokeLater(() ->{
             Gui gui = new Gui();
             gui.setVisible(true);
         });
 	}
-
 }
