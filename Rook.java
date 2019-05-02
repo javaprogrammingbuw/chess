@@ -49,6 +49,5 @@ public class Rook{
         	gui.first = null;
         }
 	
-	}
-	
+	}	
 }
