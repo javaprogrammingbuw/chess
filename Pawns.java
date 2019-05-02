@@ -1,64 +1,61 @@
-
+import java.awt.image.BufferedImage;
+import javax.swing.*;
 
 public class Pawns{
-	public Square originPoint = null;
-	public Square reachingPoint;
+	
 	public Gui gui;
+	public Pawns(Gui gui){
+		this.gui = gui;
+	}
 
-	public Horse(int i, int j){
-		originPoint = new Square[i][j];
-	}
-	public Square getOriginPoint(){
-	 	return originPoint;
-	 }
-	public Square getReachingPoint(){
-	 	return reachingPoint;
-	 }
-	public void setOriginPoint(Square originPoint){
-	 	this.originPoint=originPoint;
-	}
-	public void setReachingPoint(Square reachingPoint){
-	 	this.reachingPoint=reachingPoint;
-	}
-	public int getPosition(){
-	 	return int i;
-	}
-	public void moveKnight(){
-	     
-	}
-	public boolean checiingSquare(){
-	    int i=gui.getXis();
-		int j=gui.getYxis();
+	public void movePawn(int i, int j){
+		int k = gui.getXis();
+		int l = gui.getYxis();
 
-	 	if(originPoint == null){
-	 		originPoint = gui.squares[i][j];
-	 	}else{
-	 		switch (i){
-				case 1:
-					if(i==k+1&&j==l){       // this is for the pawns movements
+		if((i==k+1 && j==l&&k<8)||(i==k-1&&j==l&&k>=0)||(k==6&&i==k-2||k==1&&i==k+2)){       // this is for the pawns movements
 	                
-	                reachingPoint = squares[i][j];
-					reachingPoint.setPiece(originPoint.getPiece());
-					reachingPoint.setIcon(pieces.get(reachingPoint.getPiece()));
-					originPoint.setPiece(null);
-					originPoint.setIcon(new ImageIcon(
-		                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-					originPoint = null; 
-					}
-				break;
-                case 6:
-	                if(i==k-1&&j==l){       // this is for the pawns movements
-	                
-	                reachingPoint = squares[i][j];
-					reachingPoint.setPiece(first.getPiece());
-					reachingPoint.setIcon(pieces.get(second.getPiece()));
-					originPoint.setPiece(null);
-					originPoint.setIcon(new ImageIcon(
-		                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
-					originPoint = null; 
-					}
-				break;
+	        if(gui.isIconThere(i,j)==false && gui.noBackStep(i,j)==true){
+				
+        		Square second = gui.squares[i][j];
+				second.setPiece(gui.first.getPiece());
+				second.setIcon(gui.pieces.get(second.getPiece()));
+				gui.first.setPiece(null);
+				gui.first.setIcon(new ImageIcon(
+	                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+				gui.first = null;
+				gui.setPreX(i);
+				gui.setPreY(j);
+				gui.setXturn(i);
+				gui.setYturn(j);
+				gui.check();
+			}else{
+				gui.first = null;
 			}
+        }else if((i==k+1&&j==l-1||i==k+1&&j==l+1)||(i==k-1&&j==l-1||i==k-1&&j==l+1)){
+			if(gui.isIconThere(i,j)==true){
+				if((gui.isBlack(k,l)==true&&gui.isBlack(i,j)==false)||(gui.isBlack(k,l)==false&&gui.isBlack(i,j)==true)){
+	        		Square second = gui.squares[i][j];
+					second.setPiece(gui.first.getPiece());
+					second.setIcon(gui.pieces.get(second.getPiece()));
+					gui.first.setPiece(null);
+					gui.first.setIcon(new ImageIcon(
+		                    	new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB)));
+					gui.first = null;
+					gui.setPreX(i);
+					gui.setPreY(j);
+					gui.setXturn(i);
+					gui.setYturn(j);
+					gui.check();
+				}else{
+					gui.first = null;
+				}
+			}else{
+				gui.first = null;
+			}
+		}else{
+			gui.first = null;
 		}
+	
 	}
+
 }

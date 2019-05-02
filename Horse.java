@@ -5,11 +5,14 @@ import javax.swing.*;
 public class Horse{
 	
 	private Gui gui;
+	public Horse(Gui gui){
+		this.gui = gui;
+	}
 
 	public void moveKnight(int i, int j){
-		System.out.println(gui.isIconThere(1,5));
 		int k = gui.getXis();
 		int l = gui.getYxis();
+		System.out.println(k+" and "+l);
 		if((i==k-1&&j==l-2)||(i==k+1&&j==l-2)||(i==k-2&&j==l-1)||(i==k+2&&j==l-1)||
 				   (i==k-2&&j==l+1)||(i==k+2&&j==l+1)||(i==k-1&&j==l+2)||(i==k+1&&j==l+2)){    // this is for the horse movements
 	        	
@@ -24,6 +27,8 @@ public class Horse{
 							gui.first = null;
 							gui.setPreX(i);
 							gui.setPreY(j);
+							gui.setXturn(i);
+							gui.setYturn(j);
 							if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight1-white"){
 								gui.setXknight1_white(i);
 								gui.setYknight1_white(j);
@@ -53,6 +58,8 @@ public class Horse{
 						gui.first = null;
 						gui.setPreX(i);
 						gui.setPreY(j);
+						gui.setXturn(i);
+						gui.setYturn(j);
 						if(gui.isBlack(i,j)==false&&gui.squares[i][j].piece=="knight1-white"){
 								gui.setXknight1_white(i);
 								gui.setYknight1_white(j);
